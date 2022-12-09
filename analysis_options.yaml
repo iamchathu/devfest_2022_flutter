@@ -1,0 +1,15 @@
+
+include: package:flutter_lints/flutter.yaml
+
+linter:
+
+  rules:
+    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
+    prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    use_super_parameters: true
+    super_goes_last: true
+    sort_child_properties_last: true
+    sort_pub_dependencies: true 
+    sort_constructors_first: true
+    require_trailing_commas: true
+
