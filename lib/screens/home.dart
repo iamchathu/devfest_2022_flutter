@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:devfest_2022_flutter/data/cart.dart';
 import 'package:devfest_2022_flutter/data/items.dart';
 import 'package:devfest_2022_flutter/widgets/product_item.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late final Cart cart;
+
+  @override
+  void initState() {
+    super.initState();
+    cart = Cart();
+  }
+
+  void onAddItem(Item item) {
+    setState(() {
+      cart.addItem(item);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             onPressed: () => context.push('/cart'),
             icon: Badge(
-              badgeContent: Text('0'),
+              badgeContent: Text(cart.noOfItems.toString()),
               child: const Icon(Icons.shopping_cart),
             ),
           ),
@@ -32,7 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           itemCount: listOfAvailableItems.length,
           itemBuilder: (context, index) {
-            return ItemTile(item: listOfAvailableItems.elementAt(index));
+            return ItemTile(
+              item: listOfAvailableItems.elementAt(index),
+              onAddItem: onAddItem,
+            );
           },
         ),
       ),
