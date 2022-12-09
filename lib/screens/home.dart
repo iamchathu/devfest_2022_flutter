@@ -4,31 +4,17 @@ import 'package:devfest_2022_flutter/data/items.dart';
 import 'package:devfest_2022_flutter/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  late final Cart cart;
-
-  @override
-  void initState() {
-    super.initState();
-    cart = Cart();
-  }
-
-  void onAddItem(Item item) {
-    setState(() {
-      cart.addItem(item);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final noOfItems = context.watch<CartProvider>().noOfItems;
+
+    void onAddItem(Item item) => context.read<CartProvider>().addItem(item);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('GDG Store'),
@@ -36,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             onPressed: () => context.push('/cart'),
             icon: Badge(
-              badgeContent: Text(cart.noOfItems.toString()),
+              badgeContent: Text(noOfItems.toString()),
               child: const Icon(Icons.shopping_cart),
             ),
           ),

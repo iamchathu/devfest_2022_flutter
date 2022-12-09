@@ -1,16 +1,21 @@
 import 'package:devfest_2022_flutter/data/cart.dart';
-import 'package:devfest_2022_flutter/data/items.dart';
 import 'package:devfest_2022_flutter/widgets/cart_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({super.key});
 
-  // remove this with state.
-  final Cart _cart = Cart.withValues(listOfAvailableItems);
-
   @override
   Widget build(BuildContext context) {
+    final noOfItems = context.watch<CartProvider>().noOfItems;
+    final total = context.watch<CartProvider>().total;
+
+    final items = context.watch<CartProvider>().items;
+
+    void onDelete(CartItem item) =>
+        context.read<CartProvider>().removeItem(item);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
@@ -19,16 +24,19 @@ class CartScreen extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: _cart.noOfItems,
+              itemCount: noOfItems,
               itemBuilder: (context, index) {
-                return CartListItem(item: _cart.items.elementAt(index));
+                return CartListItem(
+                  item: items.elementAt(index),
+                  onDelete: onDelete,
+                );
               },
             ),
           ),
           Card(
             child: Center(
               child: Text(
-                _cart.total.toStringAsFixed(2),
+                total.toStringAsFixed(2),
               ),
             ),
           )

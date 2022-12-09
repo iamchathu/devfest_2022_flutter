@@ -1,15 +1,8 @@
 import 'package:devfest_2022_flutter/data/items.dart';
+import 'package:flutter/material.dart';
 
 class Cart {
   Cart();
-
-  factory Cart.withValues(List<Item> items) {
-    final cart = Cart();
-    for (Item item in items) {
-      cart.addItem(item);
-    }
-    return cart;
-  }
 
   final List<CartItem> items = [];
 
@@ -21,13 +14,30 @@ class Cart {
   int get noOfItems => items.length;
 
   void addItem(Item item) {
-    items.add(
-      CartItem.fromItem(item, 1),
-    );
+    /// Add only if the item no in the cart
+    if (!items.map((e) => e.id).contains(item.id)) {
+      items.add(
+        CartItem.fromItem(item, 1),
+      );
+    }
   }
 
   void removeItem(CartItem item) {
     items.remove(item);
+  }
+}
+
+class CartProvider extends Cart with ChangeNotifier {
+  @override
+  void addItem(Item item) {
+    super.addItem(item);
+    notifyListeners();
+  }
+
+  @override
+  void removeItem(CartItem item) {
+    super.removeItem(item);
+    notifyListeners();
   }
 }
 
